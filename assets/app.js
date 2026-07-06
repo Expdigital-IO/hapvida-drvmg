@@ -66,9 +66,10 @@
     };
     var ORDER = ["Belo Horizonte", "Contagem", "Betim", "Uberlândia", "Uberaba", "Divinópolis", "Poços de Caldas", "Varginha", "Alfenas", "Nova Serrana", "Ituiutaba", "Montes Claros"];
     var COORDS = {
-      "Montes Claros": [310, 105], "Belo Horizonte": [360, 235], "Contagem": [344, 229], "Betim": [331, 238],
-      "Nova Serrana": [300, 245], "Divinópolis": [284, 262], "Uberlândia": [140, 240], "Uberaba": [156, 282],
-      "Ituiutaba": [98, 258], "Varginha": [330, 320], "Alfenas": [298, 325], "Poços de Caldas": [258, 336]
+      "Belo Horizonte": [313.4, 261.4], "Contagem": [308.4, 262.1], "Betim": [302.4, 263.7],
+      "Uberlândia": [131.8, 218.3], "Uberaba": [146.2, 254.1], "Divinópolis": [273.4, 271.3],
+      "Poços de Caldas": [203.6, 342.3], "Varginha": [250.9, 332.0], "Alfenas": [229.3, 326.6],
+      "Nova Serrana": [269.5, 259.7], "Ituiutaba": [82.2, 220.7], "Montes Claros": [316.4, 124.0]
     };
     var LABEL = { hospitais: "Hospitais", pa: "Prontos atendimentos", clinicas: "Clínicas", diag: "Diagnósticos" };
     var IC = {
@@ -137,22 +138,6 @@
   function count(el) { var t = parseInt(el.getAttribute("data-count"), 10) || 0, dur = 1300, s = null; function step(ts) { if (s === null) s = ts; var p = Math.min((ts - s) / dur, 1); el.textContent = Math.round(t * (1 - Math.pow(1 - p, 3))).toLocaleString("pt-BR"); if (p < 1) requestAnimationFrame(step); } requestAnimationFrame(step); }
   var cio = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { count(en.target); cio.unobserve(en.target); } }); }, { threshold: 0.6 });
   document.querySelectorAll("[data-count]").forEach(function (el) { cio.observe(el); });
-
-  /* ---------- CONSTELAÇÃO DA REDE (atmosfera do hero) ---------- */
-  (function () {
-    var svg = document.getElementById("constel");
-    if (!svg) return;
-    // [x, y, éHospital(1/0)] — nós espalhados como uma rede própria
-    var N = [[110, 130, 0], [250, 92, 1], [208, 250, 0], [382, 176, 0], [150, 360, 0], [330, 342, 0], [480, 112, 1], [560, 268, 0], [452, 400, 0], [660, 178, 0], [720, 330, 1], [880, 140, 0], [942, 300, 0], [1082, 206, 1], [1146, 110, 0], [1002, 420, 0], [300, 470, 0], [782, 452, 0]];
-    var L = [[0, 1], [1, 3], [0, 2], [2, 4], [2, 5], [3, 6], [3, 7], [5, 7], [5, 8], [6, 9], [7, 9], [7, 10], [9, 11], [11, 12], [11, 13], [13, 14], [12, 15], [10, 12], [8, 16], [10, 17]];
-    var s = "";
-    L.forEach(function (p) { var a = N[p[0]], b = N[p[1]]; s += '<line x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '"/>'; });
-    N.forEach(function (n) {
-      if (n[2]) s += '<circle class="halo" cx="' + n[0] + '" cy="' + n[1] + '" r="6" style="animation-delay:' + (Math.random() * 3).toFixed(2) + 's"/>';
-      s += '<circle class="' + (n[2] ? "pn" : "") + '" cx="' + n[0] + '" cy="' + n[1] + '" r="' + (n[2] ? 4.6 : 2.6) + '"/>';
-    });
-    svg.innerHTML = s;
-  })();
 
   if (document.querySelector(".mcta")) document.body.classList.add("has-mcta");
 })();
