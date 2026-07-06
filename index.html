@@ -148,8 +148,19 @@
       <div class="mgs hl"><div class="n"><span data-count="12">12</span></div><div class="t">cidades em MG</div></div>
     </div>
     <div class="mg-explorer rv d1">
-      <div class="mg-cities" id="mgCities" role="tablist" aria-label="Cidades de Minas Gerais"></div>
-      <div class="mg-detail" id="mgDetail"></div>
+      <div class="mg-mapwrap">
+        <svg class="mg-map" viewBox="0 0 480 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Mapa de Minas Gerais com as cidades atendidas pela rede própria Hapvida">
+          <path class="mg-shape" d="M300 40 C360 40 410 70 435 120 C460 170 465 220 440 270 C415 315 370 340 320 350 C300 354 285 352 268 346 C235 335 205 332 175 322 C130 308 95 292 70 262 C55 244 58 232 78 224 C110 212 150 214 185 205 C215 197 228 165 240 130 C252 95 268 55 300 40 Z"/>
+          <text class="mg-maplabel" x="335" y="150">MINAS</text>
+          <text class="mg-maplabel" x="335" y="176">GERAIS</text>
+          <g id="mgPins"></g>
+        </svg>
+        <div class="mg-legend"><span class="lgi"><i class="dot h"></i> cidades com hospital</span><span class="lgi"><i class="dot o"></i> demais unidades</span></div>
+      </div>
+      <div class="mg-side">
+        <div class="mg-cities" id="mgCities" role="tablist" aria-label="Cidades de Minas Gerais"></div>
+        <div class="mg-detail" id="mgDetail"></div>
+      </div>
     </div>
     <div class="mg-scale rv d1">
       <div class="scl"><b>Parte da maior rede própria e integrada da América Latina</b></div>

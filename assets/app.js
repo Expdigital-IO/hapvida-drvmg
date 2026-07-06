@@ -1,4 +1,4 @@
-/* Hapvida × DRVMG — Landing de vendas (conversão + rede MG real) */
+/* Hapvida × DRVMG — Landing de vendas (conversão + rede MG real + mapa) */
 (function () {
   "use strict";
   var WA = "5585997800029"; // ⚠️ Wolkmar: trocar aqui
@@ -15,9 +15,7 @@
   (function () {
     var form = document.getElementById("leadForm");
     if (!form) return;
-    var fill = document.getElementById("lcFill");
-    var steps = form.querySelectorAll(".lc-step");
-    var tipo = "Individual";
+    var fill = document.getElementById("lcFill"), steps = form.querySelectorAll(".lc-step"), tipo = "Individual";
     function go(n) {
       steps.forEach(function (s) { s.classList.toggle("active", s.getAttribute("data-step") == n); });
       fill.style.width = n == 1 ? "50%" : "100%";
@@ -43,30 +41,35 @@
     });
   })();
 
-  /* ---------- REDE PRÓPRIA HAPVIDA EM MINAS GERAIS (dados oficiais) ---------- */
+  /* ---------- REDE PRÓPRIA HAPVIDA EM MG (dados oficiais + mapa) ---------- */
   (function () {
     var root = document.getElementById("rede");
     if (!root) return;
     var CITIES = {
       "Belo Horizonte": {
-        hospitais: ["Hospital Lifecenter — Funcionários", "Hospital Vera Cruz — Barro Preto", "Hospital Maternidade Octaviano Neves — Santa Efigênia"],
-        pa: ["Pronto Atendimento Contorno — Santa Efigênia", "Pronto Atendimento HVC — Barro Preto"],
-        clinicas: ["Clínica Barreiro — Barreiro", "Clínica Octaviano Neves — Santa Efigênia", "Centro Médico Proclin Amazonas — Centro", "HVC Day (Ed. Minerva) — Barro Preto", "Unidade Avançada Venda Nova — São João Batista", "Ambulatório HVC — Barro Preto"],
-        diag: ["Diagnóstico Raja Gabaglia — Santa Lúcia", "Diagnóstico Timbiras — Barro Preto", "Centro de Oncologia e Infusões — Barro Preto", "Diagnóstico Efigênia — Santa Efigênia"]
+        hospitais: [["Hospital Lifecenter", "Av. do Contorno, 4747 — Funcionários"], ["Hospital Vera Cruz", "Av. Barbacena, 653 — Barro Preto"], ["Maternidade Octaviano Neves", "Rua Ceará, 186 — Santa Efigênia"]],
+        pa: [["Pronto Atendimento Contorno", "Av. do Contorno, 2001 — Santa Efigênia"], ["Pronto Atendimento HVC", "Av. Barbacena, 653 — Barro Preto"]],
+        clinicas: [["Clínica Barreiro", "Av. Sinfrônio Brochado, 587 — Barreiro"], ["Clínica Octaviano Neves", "Rua Domingos Vieira, 561 — Santa Efigênia"], ["Centro Médico Proclin Amazonas", "Av. Amazonas, 641, 5º andar — Centro"], ["HVC Day (Ed. Minerva)", "Rua dos Aimorés, 3000 — Barro Preto"], ["Unidade Avançada Venda Nova", "Rua Dr. Álvaro Camargos, 2002 — São João Batista"], ["Ambulatório HVC", "Rua dos Timbiras, 3210 — Barro Preto"]],
+        diag: [["Diagnóstico Raja Gabaglia", "Av. Raja Gabaglia, 4091 — Santa Lúcia"], ["Diagnóstico Timbiras", "Rua dos Timbiras, 3210 — Barro Preto"], ["Centro de Oncologia e Infusões", "Rua Rio Grande do Sul, 620 — Barro Preto"], ["Diagnóstico Efigênia", "Rua Rio Grande do Norte, 441 — Santa Efigênia"]]
       },
-      "Contagem": { hospitais: ["Hospital Lifecenter Contagem — Eldorado"], clinicas: ["Centro Médico Proclin — Eldorado"] },
-      "Betim": { pa: ["Unidade Avançada de Betim — Jardim da Cidade"] },
-      "Uberlândia": { hospitais: ["Hospital Madrecor — Santa Mônica"], clinicas: ["Clínica Médica Uberlândia — Tabajaras"] },
-      "Uberaba": { pa: ["Pronto Atendimento Uberaba — Santos Dumont"], clinicas: ["Clínica Triângulo Sul — São Benedito", "Clínica Uberaba — Santa Maria"], diag: ["Diagnóstico Sete Colinas — São Benedito"] },
-      "Divinópolis": { hospitais: ["Hospital Santa Mônica — Padre Libério"], clinicas: ["Centro Clínico Divinópolis — Centro"], diag: ["Bioimagem Divinópolis — Centro"] },
-      "Poços de Caldas": { hospitais: ["Hospital Poços de Caldas — Jardim Esmeralda"] },
-      "Varginha": { hospitais: ["Hospital Varginha — Parque Mariela"] },
-      "Alfenas": { hospitais: ["Hospital Alfenas — Jardim Tropical"] },
-      "Nova Serrana": { hospitais: ["Hospital Santa Mônica — Nova Serrana"] },
-      "Ituiutaba": { clinicas: ["Clínica Ituiutaba — Centro"] },
-      "Montes Claros": { clinicas: ["Clínica Dr. Santos — Centro"] }
+      "Contagem": { hospitais: [["Hospital Lifecenter Contagem", "Rua das Mangueiras, 150 — Eldorado"]], clinicas: [["Centro Médico Proclin", "Av. João Cesar de Oliveira, 1009 — Eldorado"]] },
+      "Betim": { pa: [["Unidade Avançada de Betim", "Rua Edmeia Mattos Lazzarotti, 2192 — Jardim da Cidade"]] },
+      "Uberlândia": { hospitais: [["Hospital Madrecor", "Av. Francisco Ribeiro, 1111 — Santa Mônica"]], clinicas: [["Clínica Médica Uberlândia", "Rua Virgílio Melo Franco, 465 — Tabajaras"]] },
+      "Uberaba": { pa: [["Pronto Atendimento Uberaba", "Av. Santos Dumont, 2140 — Santos Dumont"]], clinicas: [["Clínica Triângulo Sul", "Rua Ituiutaba, 577 — São Benedito"], ["Clínica Uberaba", "Av. Santa Beatriz da Silva, 1880 — Santa Maria"]], diag: [["Diagnóstico Sete Colinas", "Av. Santa Beatriz da Silva, 1861 — São Benedito"]] },
+      "Divinópolis": { hospitais: [["Hospital Santa Mônica", "Rua Pedro F. Amaral, 33 — Padre Libério"]], clinicas: [["Centro Clínico Divinópolis", "Av. Sete de Setembro, 951 — Centro"]], diag: [["Bioimagem Divinópolis", "Rua Rio de Janeiro, 101 — Centro"]] },
+      "Poços de Caldas": { hospitais: [["Hospital Poços de Caldas", "Rua Frei Cristóvão de Figueiredo, 125 — Jardim Esmeralda"]] },
+      "Varginha": { hospitais: [["Hospital Varginha", "Av. Antonieta Esper Kallas, 299 — Parque Mariela"]] },
+      "Alfenas": { hospitais: [["Hospital Alfenas", "Rua Adolfo Engel, 19 — Jardim Tropical"]] },
+      "Nova Serrana": { hospitais: [["Hospital Santa Mônica Nova Serrana", "Rua João Caetano Campos, 480 — Francisco Lucas"]] },
+      "Ituiutaba": { clinicas: [["Clínica Ituiutaba", "Rua Vinte e Seis, 1547 — Centro"]] },
+      "Montes Claros": { clinicas: [["Clínica Dr. Santos", "Rua Dr. Santos, 223, Sala 204 — Centro"]] }
     };
     var ORDER = ["Belo Horizonte", "Contagem", "Betim", "Uberlândia", "Uberaba", "Divinópolis", "Poços de Caldas", "Varginha", "Alfenas", "Nova Serrana", "Ituiutaba", "Montes Claros"];
+    var COORDS = {
+      "Montes Claros": [310, 105], "Belo Horizonte": [360, 235], "Contagem": [344, 229], "Betim": [331, 238],
+      "Nova Serrana": [300, 245], "Divinópolis": [284, 262], "Uberlândia": [140, 240], "Uberaba": [156, 282],
+      "Ituiutaba": [98, 258], "Varginha": [330, 320], "Alfenas": [298, 325], "Poços de Caldas": [258, 336]
+    };
     var LABEL = { hospitais: "Hospitais", pa: "Prontos atendimentos", clinicas: "Clínicas", diag: "Diagnósticos" };
     var IC = {
       hospitais: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="16" height="16"><path d="M12 7v8M8 11h8"/><rect x="4" y="4" width="16" height="16" rx="3"/></svg>',
@@ -74,30 +77,42 @@
       clinicas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="16" height="16"><path d="M4 21V9l8-6 8 6v12M9 21v-6h6v6"/></svg>',
       diag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="16" height="16"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
     };
-    var listEl = root.querySelector("#mgCities"), detEl = root.querySelector("#mgDetail"), ctaBtn = root.querySelector("#mgCta");
+    var listEl = root.querySelector("#mgCities"), detEl = root.querySelector("#mgDetail"), ctaBtn = root.querySelector("#mgCta"), pinsEl = root.querySelector("#mgPins");
     var current = "";
     function total(c) { var d = CITIES[c], n = 0; ["hospitais", "pa", "clinicas", "diag"].forEach(function (k) { if (d[k]) n += d[k].length; }); return n; }
+    function hasHosp(c) { return !!(CITIES[c].hospitais && CITIES[c].hospitais.length); }
+    function buildPins() {
+      if (!pinsEl) return;
+      pinsEl.innerHTML = ORDER.map(function (c) {
+        var p = COORDS[c]; if (!p) return "";
+        return '<g class="mg-pin' + (hasHosp(c) ? " big" : "") + '" data-city="' + esc(c) + '" transform="translate(' + p[0] + "," + p[1] + ')" tabindex="0" role="button" aria-label="' + esc(c) + '">' +
+          '<circle class="pin-halo" r="12"/><circle class="pin-dot" r="' + (hasHosp(c) ? 6.5 : 4.5) + '"/>' +
+          '<text class="pin-lbl" y="-13">' + esc(c) + "</text></g>";
+      }).join("");
+      pinsEl.querySelectorAll(".mg-pin").forEach(function (g) {
+        g.addEventListener("click", function () { select(g.getAttribute("data-city")); });
+        g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(g.getAttribute("data-city")); } });
+      });
+    }
     function renderList() {
       listEl.innerHTML = ORDER.map(function (c) { return '<button class="mg-city' + (c === current ? " on" : "") + '" data-city="' + esc(c) + '">' + esc(c) + '<span class="badge2">' + total(c) + "</span></button>"; }).join("");
       listEl.querySelectorAll(".mg-city").forEach(function (b) { b.addEventListener("click", function () { select(b.getAttribute("data-city")); }); });
     }
     function renderDetail() {
-      var d = CITIES[current], html = "<h3>" + esc(current) + '</h3><div class="dsub">' + total(current) + " unidade(s) da rede própria Hapvida</div>";
+      var d = CITIES[current], html = "<h3>" + esc(current) + '</h3><div class="dsub">' + total(current) + " unidade(s) da rede própria Hapvida · MG</div>";
       ["hospitais", "pa", "clinicas", "diag"].forEach(function (k) {
         if (!d[k] || !d[k].length) return;
         html += '<div class="mg-group"><div class="gh">' + IC[k] + " " + LABEL[k] + " (" + d[k].length + ")</div>";
-        d[k].forEach(function (u) {
-          var p = u.split(" — ");
-          html += '<div class="mg-unit"><span class="ui">' + IC[k] + "</span><div><b>" + esc(p[0]) + "</b>" + (p[1] ? "<span>" + esc(p[1]) + "</span>" : "") + "</div></div>";
-        });
+        d[k].forEach(function (u) { html += '<div class="mg-unit"><span class="ui">' + IC[k] + "</span><div><b>" + esc(u[0]) + "</b><span>" + esc(u[1]) + "</span></div></div>"; });
         html += "</div>";
       });
       detEl.innerHTML = html;
       if (ctaBtn) ctaBtn.setAttribute("data-msg", "Olá! Quero conhecer a rede Hapvida completa em " + current + " (MG) e fazer uma cotação.");
     }
-    function select(c) { current = c; renderList(); renderDetail(); }
+    function highlightPin() { if (pinsEl) pinsEl.querySelectorAll(".mg-pin").forEach(function (g) { g.classList.toggle("on", g.getAttribute("data-city") === current); }); }
+    function select(c) { current = c; renderList(); renderDetail(); highlightPin(); }
     if (ctaBtn) ctaBtn.addEventListener("click", function () { openWa(this.getAttribute("data-msg") || "Olá! Quero conhecer a rede Hapvida em Minas Gerais."); });
-    select("Belo Horizonte");
+    buildPins(); select("Belo Horizonte");
   })();
 
   /* ---------- CHAT DA ATENDENTE ---------- */
