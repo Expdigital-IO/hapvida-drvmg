@@ -129,7 +129,8 @@
 
   /* ---------- FAQ ---------- */
   document.querySelectorAll(".faq-q").forEach(function (q) {
-    q.addEventListener("click", function () { var it = q.closest(".faq-item"), a = it.querySelector(".faq-a"); var o = it.classList.toggle("open"); a.style.maxHeight = o ? a.scrollHeight + "px" : 0; });
+    q.setAttribute("aria-expanded", "false");
+    q.addEventListener("click", function () { var it = q.closest(".faq-item"), a = it.querySelector(".faq-a"); var o = it.classList.toggle("open"); a.style.maxHeight = o ? a.scrollHeight + "px" : 0; q.setAttribute("aria-expanded", o ? "true" : "false"); });
   });
 
   /* ---------- CONTADORES + REVEAL ---------- */

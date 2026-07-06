@@ -124,7 +124,7 @@ h1,h2,h3,h4{font-family:var(--serif);font-weight:500;letter-spacing:-.018em;line
 .leadcard{background:#fff;border-radius:16px;box-shadow:0 24px 56px -30px rgba(245,130,30,.18),0 12px 30px -18px rgba(12,32,51,.16);border:1px solid #EBE2D4;padding:0;position:relative;color:var(--ink);overflow:hidden}
 .leadcard .lc-top{background:linear-gradient(100deg,var(--blue),var(--blue-800));color:#fff;padding:20px 26px 18px}
 .leadcard .lc-top .badge{display:inline-block;background:var(--orange);color:#fff;font-size:11px;font-weight:700;letter-spacing:.09em;padding:5px 12px;border-radius:999px;margin-bottom:9px}
-.leadcard .lc-top h3{color:#fff;font-size:22px}
+.leadcard .lc-top h2{color:#fff;font-size:22px;font-weight:500}
 .leadcard .lc-top p{font-size:13.5px;color:rgba(255,255,255,.8);margin-top:2px}
 .lc-bar{height:5px;background:rgba(255,255,255,.2);border-radius:999px;margin-top:14px;overflow:hidden}
 .lc-fill{height:100%;width:50%;background:var(--orange);border-radius:999px;transition:width .4s cubic-bezier(.2,.7,.2,1)}

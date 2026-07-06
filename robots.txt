@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://hapvida.drvmg.com.br/sitemap.xml
