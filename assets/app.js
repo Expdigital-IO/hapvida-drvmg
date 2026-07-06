@@ -1,17 +1,17 @@
-/* Hapvida × DRVMG — Landing de vendas v2 (conversão) */
+/* Hapvida × DRVMG — Landing de vendas (conversão + rede MG real) */
 (function () {
   "use strict";
   var WA = "5585997800029"; // ⚠️ Wolkmar: trocar aqui
   var wa = function (m) { return "https://wa.me/" + WA + "?text=" + encodeURIComponent(m); };
   var openWa = function (m) { window.open(wa(m), "_blank", "noopener,noreferrer"); };
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
   var ss = function (k, v) { try { if (v === undefined) return sessionStorage.getItem(k); sessionStorage.setItem(k, v); } catch (e) { return null; } };
 
-  // botões [data-wa]
   document.querySelectorAll("[data-wa]").forEach(function (b) {
     b.addEventListener("click", function (e) { e.preventDefault(); openWa(b.getAttribute("data-wa") || "Olá! Quero uma cotação do plano Hapvida."); });
   });
 
-  /* ---------- FORMULÁRIO MULTI-ETAPA (hero) ---------- */
+  /* ---------- FORMULÁRIO MULTI-ETAPA ---------- */
   (function () {
     var form = document.getElementById("leadForm");
     if (!form) return;
@@ -21,20 +21,16 @@
     function go(n) {
       steps.forEach(function (s) { s.classList.toggle("active", s.getAttribute("data-step") == n); });
       fill.style.width = n == 1 ? "50%" : "100%";
-      if (n == 2) { var f = form.querySelector("#ln"); if (f) setTimeout(function(){ f.focus(); }, 60); }
+      if (n == 2) { var f = form.querySelector("#ln"); if (f) setTimeout(function () { f.focus(); }, 60); }
     }
-    form.querySelectorAll(".opt[data-tipo]").forEach(function (o) {
-      o.addEventListener("click", function () { tipo = o.getAttribute("data-tipo"); go(2); });
-    });
+    form.querySelectorAll(".opt[data-tipo]").forEach(function (o) { o.addEventListener("click", function () { tipo = o.getAttribute("data-tipo"); go(2); }); });
     var back = document.getElementById("lcBack");
     if (back) back.addEventListener("click", function () { go(1); });
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       var ok = true;
       form.querySelectorAll(".lc-step[data-step='2'] [required]").forEach(function (inp) {
-        var bad = !(inp.value || "").trim();
-        var fld = inp.closest(".field"); if (fld) fld.classList.toggle("invalid", bad);
-        if (bad) ok = false;
+        var bad = !(inp.value || "").trim(); var fld = inp.closest(".field"); if (fld) fld.classList.toggle("invalid", bad); if (bad) ok = false;
       });
       if (!ok) return;
       var g = function (id) { var el = document.getElementById(id); return el && el.value.trim() ? el.value.trim() : ""; };
@@ -47,46 +43,61 @@
     });
   })();
 
-  /* ---------- EXPLORADOR DA REDE CREDENCIADA ---------- */
+  /* ---------- REDE PRÓPRIA HAPVIDA EM MINAS GERAIS (dados oficiais) ---------- */
   (function () {
     var root = document.getElementById("rede");
     if (!root) return;
-    var CAT = {
-      hospitais: { n: 85, plus: true, cat: "hospitais próprios", h: "Hospitais próprios de ponta a ponta", p: "Internação, cirurgias e maternidade em estrutura própria Hapvida — sem depender de terceiros, com mais agilidade e cuidado." },
-      pa: { n: 77, plus: true, cat: "prontos atendimentos", h: "Pronto atendimento quando você precisa", p: "Emergência e urgência 24h em dezenas de unidades — atendimento rápido pra você e sua família a qualquer hora." },
-      clinicas: { n: 331, plus: true, cat: "clínicas", h: "Consultas perto de você", p: "Centenas de clínicas para consultas e acompanhamento com as principais especialidades médicas." },
-      diag: { n: 271, plus: true, cat: "unidades de diagnóstico", h: "Exames com laudo ágil", p: "Laboratórios e centros de imagem próprios — do exame simples ao mais complexo, tudo na mesma rede." },
-      estados: { n: 20, plus: false, cat: "estados atendidos", h: "Cobertura em todo o Brasil", p: "Onde você estiver, tem Hapvida NotreDame Intermédica — a maior rede exclusiva do Norte e Nordeste, com atendimento nacional." }
+    var CITIES = {
+      "Belo Horizonte": {
+        hospitais: ["Hospital Lifecenter — Funcionários", "Hospital Vera Cruz — Barro Preto", "Hospital Maternidade Octaviano Neves — Santa Efigênia"],
+        pa: ["Pronto Atendimento Contorno — Santa Efigênia", "Pronto Atendimento HVC — Barro Preto"],
+        clinicas: ["Clínica Barreiro — Barreiro", "Clínica Octaviano Neves — Santa Efigênia", "Centro Médico Proclin Amazonas — Centro", "HVC Day (Ed. Minerva) — Barro Preto", "Unidade Avançada Venda Nova — São João Batista", "Ambulatório HVC — Barro Preto"],
+        diag: ["Diagnóstico Raja Gabaglia — Santa Lúcia", "Diagnóstico Timbiras — Barro Preto", "Centro de Oncologia e Infusões — Barro Preto", "Diagnóstico Efigênia — Santa Efigênia"]
+      },
+      "Contagem": { hospitais: ["Hospital Lifecenter Contagem — Eldorado"], clinicas: ["Centro Médico Proclin — Eldorado"] },
+      "Betim": { pa: ["Unidade Avançada de Betim — Jardim da Cidade"] },
+      "Uberlândia": { hospitais: ["Hospital Madrecor — Santa Mônica"], clinicas: ["Clínica Médica Uberlândia — Tabajaras"] },
+      "Uberaba": { pa: ["Pronto Atendimento Uberaba — Santos Dumont"], clinicas: ["Clínica Triângulo Sul — São Benedito", "Clínica Uberaba — Santa Maria"], diag: ["Diagnóstico Sete Colinas — São Benedito"] },
+      "Divinópolis": { hospitais: ["Hospital Santa Mônica — Padre Libério"], clinicas: ["Centro Clínico Divinópolis — Centro"], diag: ["Bioimagem Divinópolis — Centro"] },
+      "Poços de Caldas": { hospitais: ["Hospital Poços de Caldas — Jardim Esmeralda"] },
+      "Varginha": { hospitais: ["Hospital Varginha — Parque Mariela"] },
+      "Alfenas": { hospitais: ["Hospital Alfenas — Jardim Tropical"] },
+      "Nova Serrana": { hospitais: ["Hospital Santa Mônica — Nova Serrana"] },
+      "Ituiutaba": { clinicas: ["Clínica Ituiutaba — Centro"] },
+      "Montes Claros": { clinicas: ["Clínica Dr. Santos — Centro"] }
     };
-    var numEl = root.querySelector("#redeNum"), plusEl = root.querySelector("#redePlus"), catEl = root.querySelector("#redeCat");
-    var hEl = root.querySelector("#redeH"), pEl = root.querySelector("#redeP");
-    var current = "hospitais", city = "";
-    function animateNum(target) {
-      var dur = 900, start = null;
-      function step(ts) { if (start === null) start = ts; var pr = Math.min((ts - start) / dur, 1); numEl.textContent = Math.round(target * (1 - Math.pow(1 - pr, 3))); if (pr < 1) requestAnimationFrame(step); }
-      requestAnimationFrame(step);
+    var ORDER = ["Belo Horizonte", "Contagem", "Betim", "Uberlândia", "Uberaba", "Divinópolis", "Poços de Caldas", "Varginha", "Alfenas", "Nova Serrana", "Ituiutaba", "Montes Claros"];
+    var LABEL = { hospitais: "Hospitais", pa: "Prontos atendimentos", clinicas: "Clínicas", diag: "Diagnósticos" };
+    var IC = {
+      hospitais: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="16" height="16"><path d="M12 7v8M8 11h8"/><rect x="4" y="4" width="16" height="16" rx="3"/></svg>',
+      pa: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="16" height="16"><path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11Z"/><path d="M12 7v6M9 10h6"/></svg>',
+      clinicas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="16" height="16"><path d="M4 21V9l8-6 8 6v12M9 21v-6h6v6"/></svg>',
+      diag: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" width="16" height="16"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>'
+    };
+    var listEl = root.querySelector("#mgCities"), detEl = root.querySelector("#mgDetail"), ctaBtn = root.querySelector("#mgCta");
+    var current = "";
+    function total(c) { var d = CITIES[c], n = 0; ["hospitais", "pa", "clinicas", "diag"].forEach(function (k) { if (d[k]) n += d[k].length; }); return n; }
+    function renderList() {
+      listEl.innerHTML = ORDER.map(function (c) { return '<button class="mg-city' + (c === current ? " on" : "") + '" data-city="' + esc(c) + '">' + esc(c) + '<span class="badge2">' + total(c) + "</span></button>"; }).join("");
+      listEl.querySelectorAll(".mg-city").forEach(function (b) { b.addEventListener("click", function () { select(b.getAttribute("data-city")); }); });
     }
-    function render(key) {
-      var c = CAT[key]; current = key;
-      animateNum(c.n); plusEl.style.display = c.plus ? "inline" : "none";
-      catEl.textContent = c.cat; hEl.textContent = c.h; pEl.textContent = c.p;
-      updateCta();
+    function renderDetail() {
+      var d = CITIES[current], html = "<h3>" + esc(current) + '</h3><div class="dsub">' + total(current) + " unidade(s) da rede própria Hapvida</div>";
+      ["hospitais", "pa", "clinicas", "diag"].forEach(function (k) {
+        if (!d[k] || !d[k].length) return;
+        html += '<div class="mg-group"><div class="gh">' + IC[k] + " " + LABEL[k] + " (" + d[k].length + ")</div>";
+        d[k].forEach(function (u) {
+          var p = u.split(" — ");
+          html += '<div class="mg-unit"><span class="ui">' + IC[k] + "</span><div><b>" + esc(p[0]) + "</b>" + (p[1] ? "<span>" + esc(p[1]) + "</span>" : "") + "</div></div>";
+        });
+        html += "</div>";
+      });
+      detEl.innerHTML = html;
+      if (ctaBtn) ctaBtn.setAttribute("data-msg", "Olá! Quero conhecer a rede Hapvida completa em " + current + " (MG) e fazer uma cotação.");
     }
-    function updateCta() {
-      var ct = root.querySelector("#redeCtaTxt"), btn = root.querySelector("#redeCtaBtn");
-      var c = CAT[current];
-      if (city) { ct.innerHTML = "Quer a lista de <b>" + c.cat + "</b> em <b>" + city + "</b>? A gente te envia agora."; }
-      else { ct.innerHTML = "Escolha sua cidade e receba a <b>lista completa da rede</b> no WhatsApp."; }
-      btn.setAttribute("data-msg", "Olá! Quero conhecer a rede credenciada Hapvida (" + c.cat + ")" + (city ? " em " + city : "") + ". Pode me enviar a lista?");
-    }
-    root.querySelectorAll(".rtab").forEach(function (t) {
-      t.addEventListener("click", function () { root.querySelectorAll(".rtab").forEach(function (x) { x.classList.remove("on"); }); t.classList.add("on"); render(t.getAttribute("data-cat")); });
-    });
-    root.querySelectorAll(".rchip").forEach(function (ch) {
-      ch.addEventListener("click", function () { root.querySelectorAll(".rchip").forEach(function (x) { x.classList.remove("on"); }); ch.classList.add("on"); city = ch.textContent.trim(); updateCta(); });
-    });
-    root.querySelector("#redeCtaBtn").addEventListener("click", function () { openWa(this.getAttribute("data-msg") || "Olá! Quero conhecer a rede credenciada Hapvida."); });
-    render("hospitais");
+    function select(c) { current = c; renderList(); renderDetail(); }
+    if (ctaBtn) ctaBtn.addEventListener("click", function () { openWa(this.getAttribute("data-msg") || "Olá! Quero conhecer a rede Hapvida em Minas Gerais."); });
+    select("Belo Horizonte");
   })();
 
   /* ---------- CHAT DA ATENDENTE ---------- */
@@ -96,35 +107,8 @@
     var open = function () { if (ss("hv_chat") !== "1") pop.classList.add("show"); };
     var close = function () { pop.classList.remove("show"); ss("hv_chat", "1"); };
     pop.querySelector(".cx").addEventListener("click", close);
-    pop.querySelectorAll("[data-chat]").forEach(function (b) {
-      b.addEventListener("click", function () { openWa(b.getAttribute("data-chat")); close(); });
-    });
+    pop.querySelectorAll("[data-chat]").forEach(function (b) { b.addEventListener("click", function () { openWa(b.getAttribute("data-chat")); close(); }); });
     if (ss("hv_chat") !== "1") setTimeout(open, 9000);
-  })();
-
-  /* ---------- EXIT-INTENT ---------- */
-  (function () {
-    var ov = document.getElementById("exitov");
-    if (!ov) return;
-    var form = ov.querySelector("form");
-    var closeBtn = ov.querySelector(".ex-close");
-    function show() { if (ss("hv_exit") === "1" || ss("hv_lead") === "1") return; ov.classList.add("show"); ss("hv_exit", "1"); }
-    function hide() { ov.classList.remove("show"); }
-    closeBtn.addEventListener("click", hide);
-    ov.addEventListener("click", function (e) { if (e.target === ov) hide(); });
-    document.addEventListener("keydown", function (e) { if (e.key === "Escape") hide(); });
-    if (window.matchMedia("(min-width:760px)").matches) {
-      document.addEventListener("mouseout", function (e) { if (!e.relatedTarget && e.clientY <= 0) show(); });
-    }
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var ok = true;
-      form.querySelectorAll("[required]").forEach(function (inp) { var bad = !(inp.value || "").trim(); var fld = inp.closest(".field"); if (fld) fld.classList.toggle("invalid", bad); if (bad) ok = false; });
-      if (!ok) return;
-      var n = form.querySelector("[data-label='Nome']"), w = form.querySelector("[data-label='WhatsApp']");
-      openWa("Quero a Tabela Hapvida 2026 com as condições de hoje!\n• Nome: " + (n ? n.value.trim() : "") + "\n• WhatsApp: " + (w ? w.value.trim() : ""));
-      hide();
-    });
   })();
 
   /* ---------- FAQ ---------- */
@@ -135,8 +119,7 @@
   /* ---------- CONTADORES + REVEAL ---------- */
   var io = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } }); }, { threshold: 0.12, rootMargin: "0px 0px -6% 0px" });
   document.querySelectorAll(".rv").forEach(function (el) { io.observe(el); });
-
-  function count(el) { var t = parseInt(el.getAttribute("data-count"), 10) || 0, dur = 1400, s = null; function step(ts) { if (s === null) s = ts; var p = Math.min((ts - s) / dur, 1); el.textContent = Math.round(t * (1 - Math.pow(1 - p, 3))).toLocaleString("pt-BR"); if (p < 1) requestAnimationFrame(step); } requestAnimationFrame(step); }
+  function count(el) { var t = parseInt(el.getAttribute("data-count"), 10) || 0, dur = 1300, s = null; function step(ts) { if (s === null) s = ts; var p = Math.min((ts - s) / dur, 1); el.textContent = Math.round(t * (1 - Math.pow(1 - p, 3))).toLocaleString("pt-BR"); if (p < 1) requestAnimationFrame(step); } requestAnimationFrame(step); }
   var cio = new IntersectionObserver(function (es) { es.forEach(function (en) { if (en.isIntersecting) { count(en.target); cio.unobserve(en.target); } }); }, { threshold: 0.6 });
   document.querySelectorAll("[data-count]").forEach(function (el) { cio.observe(el); });
 
