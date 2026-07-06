@@ -347,6 +347,10 @@ section.pad{padding:88px 0}
 .faq-item.open .fx{transform:rotate(45deg)}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease}
 .faq-a p{padding:0 4px 21px;color:var(--gray);font-size:15.5px;max-width:74ch}
+.faq-a p + .faq-list{margin-top:-8px}
+.faq-list{list-style:none;padding:2px 4px 20px;display:grid;gap:9px}
+.faq-list li{display:flex;gap:14px;align-items:baseline;font-size:15px;color:var(--ink);line-height:1.4}
+.faq-list li b{flex:none;min-width:76px;color:var(--orange-600);font-family:var(--logo);font-weight:800;font-size:13.5px}
 
 /* cta final */
 .cta{background:linear-gradient(120deg,var(--orange),#ff9d42);position:relative;overflow:hidden}
