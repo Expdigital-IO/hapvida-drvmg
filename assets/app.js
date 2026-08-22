@@ -1,7 +1,7 @@
 /* Hapvida × DRVMG — Landing de vendas (conversão + rede MG real + mapa) */
 (function () {
   "use strict";
-  var WA = "5585997800029"; // ⚠️ Wolkmar: trocar aqui
+  var WA = "5531999526299"; // ⚠️ Wolkmar: trocar aqui
   var wa = function (m) { return "https://wa.me/" + WA + "?text=" + encodeURIComponent(m); };
   var openWa = function (m) { window.open(wa(m), "_blank", "noopener,noreferrer"); };
   var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
